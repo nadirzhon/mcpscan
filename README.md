@@ -42,16 +42,17 @@ Web apps have scanners for this. MCP servers, so far, mostly don't. `mcpscan` is
 ## Install & run
 
 ```bash
-uvx mcpscan <server>                                          # once published to PyPI
-uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan <server>   # works today
+pip install mcpsecscan          # on PyPI (name `mcpscan` was taken — command is still `mcpscan`)
+uvx mcpsecscan <server>         # run without installing
+uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan <server>   # from source
 ```
 
 `<server>` is anything fastmcp can connect to — a URL, a server script, or a stdio command:
 
 ```bash
-uvx mcpscan https://some-host/mcp
-uvx mcpscan "python my_server.py"
-uvx mcpscan "uvx some-published-mcp"
+uvx mcpsecscan https://some-host/mcp
+uvx mcpsecscan "python my_server.py"
+uvx mcpsecscan "uvx some-published-mcp"
 ```
 
 ### AI-assisted analysis (optional)
@@ -61,7 +62,7 @@ tool *combinations*, missing authorization, and subtle injection surfaces:
 
 ```bash
 export ANTHROPIC_API_KEY=...
-uvx --with 'mcpscan[ai]' mcpscan https://some-host/mcp --ai
+uvx --with 'mcpsecscan[ai]' mcpsecscan https://some-host/mcp --ai
 ```
 
 ## Options

@@ -1,5 +1,5 @@
 [project]
-name = "mcpscan"
+name = "mcpsecscan"
 version = "0.1.0"
 description = "Security scanner for MCP (Model Context Protocol) servers — detects tool poisoning, over-privileged tools, hidden instructions & injection surfaces."
 readme = "README.md"
@@ -27,6 +27,7 @@ dev = ["pytest>=8.0", "ruff>=0.6", "anthropic>=0.109"]
 
 [project.scripts]
 mcpscan = "mcpscan.cli:main"
+mcpsecscan = "mcpscan.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/nadirzhon/mcpscan"
