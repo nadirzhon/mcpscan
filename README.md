@@ -22,6 +22,10 @@ agent to it.
 
 ---
 
+> 📊 **Used in [State of MCP Security](https://github.com/nadirzhon/state-of-mcp-security)** — a
+> reproducible study that scanned 15 MCP servers with mcpscan and found **87% expose a
+> medium-or-higher hardening issue** to connecting AI agents.
+
 ## Why this exists
 
 MCP servers hand tools directly to an AI agent's context — and the agent will *follow*
