@@ -14,6 +14,10 @@ agent to it.
 ![CI](https://github.com/nadirzhon/mcpscan/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+<br>
+
+![mcpscan demo](assets/demo.svg)
+
 </div>
 
 ---
