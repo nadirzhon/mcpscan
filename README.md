@@ -141,6 +141,14 @@ pytest          # deterministic checks + report + AI parsing (mocked)
 ruff check .
 ```
 
+## Part of an AI × Security toolkit
+
+- [offsec-mcp](https://github.com/nadirzhon/offsec-mcp) — MCP server giving AI agents offensive-security tools (recon, CVE, JS analysis)
+- [specter](https://github.com/nadirzhon/specter) — autonomous AI recon agent that drives those tools end-to-end
+- [vigil](https://github.com/nadirzhon/vigil) — AI security review for every pull request
+- **mcpscan** — security scanner for MCP servers (tool poisoning, injection surfaces) · *(this repo)*
+- [State of MCP Security](https://github.com/nadirzhon/state-of-mcp-security) — research: 87% of scanned MCP servers expose a medium+ hardening issue
+
 ## License
 
 MIT — see [LICENSE](LICENSE). For authorized security assessment and research.
