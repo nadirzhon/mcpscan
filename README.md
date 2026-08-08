@@ -34,7 +34,8 @@ Web apps have scanners for this. MCP servers, so far, mostly don't. `mcpscan` is
 ## Install & run
 
 ```bash
-uvx mcpscan <server>
+uvx mcpscan <server>                                          # once published to PyPI
+uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan <server>   # works today
 ```
 
 `<server>` is anything fastmcp can connect to — a URL, a server script, or a stdio command:
@@ -98,6 +99,26 @@ With `--ai`, Claude adds reasoning-based findings on top (tool combinations, aut
   ────────────────────────────────────────────────────
   2 finding(s): 🟥 1 critical  🟧 1 high
 ```
+
+## Real-world results
+
+Run against the official MCP reference servers (fully reproducible):
+
+```bash
+# Anthropic's filesystem server — 25 findings
+uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan \
+  "npx -y @modelcontextprotocol/server-filesystem /tmp"
+# → 12 × unconstrained-input (every path param is a traversal surface),
+#   1 × dangerous-capability (write_file), 13 × loose-schema (info)
+
+# The "everything" reference server — 11 findings
+uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan \
+  "npx -y @modelcontextprotocol/server-everything" --json
+```
+
+It also scans remote HTTP servers directly, e.g. `mcpscan https://mcp.deepwiki.com/mcp`.
+See [`examples/`](examples/) for saved output. Findings are conservative and
+deterministic; add `--ai` for reasoning-based analysis of tool combinations.
 
 ## Safety
 

@@ -1,0 +1,132 @@
+
+  mcpscan — npx -y @modelcontextprotocol/server-filesystem /tmp
+  tools: 14  resources: 0  prompts: 0
+  ────────────────────────────────────────────────────
+  🟨 [MEDIUM] Unconstrained `path` parameter on `create_directory`
+     target: create_directory  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `directory_tree`
+     target: directory_tree  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `edit_file`
+     target: edit_file  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `get_file_info`
+     target: get_file_info  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `list_directory`
+     target: list_directory  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `list_directory_with_sizes`
+     target: list_directory_with_sizes  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `read_file`
+     target: read_file  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `read_media_file`
+     target: read_media_file  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `read_text_file`
+     target: read_text_file  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `search_files`
+     target: search_files  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  🟨 [MEDIUM] Powerful capability exposed: file-write-delete
+     target: write_file  ·  dangerous-capability
+     Tool `write_file` appears to offer file-write-delete. In an agent, a prompt-injected instruction could invoke it against the operator's intent.
+     fix: Gate this tool behind an authorization scope or human confirmation; constrain its inputs.
+
+  🟨 [MEDIUM] Unconstrained `path` parameter on `write_file`
+     target: write_file  ·  unconstrained-input
+     `path` is a free-form string with no enum/pattern/format — a natural injection or traversal surface (paths, commands, URLs, queries).
+     fix: Constrain `path` with a pattern/enum, or validate and sandbox it server-side.
+
+  ⬜ [INFO] Tool `create_directory` input schema allows arbitrary extra properties
+     target: create_directory  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `directory_tree` input schema allows arbitrary extra properties
+     target: directory_tree  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `edit_file` input schema allows arbitrary extra properties
+     target: edit_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `get_file_info` input schema allows arbitrary extra properties
+     target: get_file_info  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `list_directory` input schema allows arbitrary extra properties
+     target: list_directory  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `list_directory_with_sizes` input schema allows arbitrary extra properties
+     target: list_directory_with_sizes  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `move_file` input schema allows arbitrary extra properties
+     target: move_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `read_file` input schema allows arbitrary extra properties
+     target: read_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `read_media_file` input schema allows arbitrary extra properties
+     target: read_media_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `read_multiple_files` input schema allows arbitrary extra properties
+     target: read_multiple_files  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `read_text_file` input schema allows arbitrary extra properties
+     target: read_text_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `search_files` input schema allows arbitrary extra properties
+     target: search_files  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ⬜ [INFO] Tool `write_file` input schema allows arbitrary extra properties
+     target: write_file  ·  loose-schema
+     The input schema does not set additionalProperties:false, so unexpected fields pass through.
+     fix: Set additionalProperties:false and mark required fields.
+
+  ────────────────────────────────────────────────────
+  25 finding(s): 🟨 12 medium  ⬜ 13 info
+

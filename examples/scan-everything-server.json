@@ -1,0 +1,106 @@
+{
+  "server": "npx -y @modelcontextprotocol/server-everything",
+  "total": 11,
+  "worst_severity": "medium",
+  "findings": [
+    {
+      "severity": "medium",
+      "category": "dangerous-capability",
+      "target": "gzip-file-as-resource",
+      "title": "Powerful capability exposed: network-egress",
+      "description": "Tool `gzip-file-as-resource` appears to offer network-egress. In an agent, a prompt-injected instruction could invoke it against the operator's intent.",
+      "recommendation": "Gate this tool behind an authorization scope or human confirmation; constrain its inputs.",
+      "source": "static"
+    },
+    {
+      "severity": "medium",
+      "category": "dangerous-capability",
+      "target": "simulate-research-query",
+      "title": "Powerful capability exposed: network-egress",
+      "description": "Tool `simulate-research-query` appears to offer network-egress. In an agent, a prompt-injected instruction could invoke it against the operator's intent.",
+      "recommendation": "Gate this tool behind an authorization scope or human confirmation; constrain its inputs.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "echo",
+      "title": "Tool `echo` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "get-annotated-message",
+      "title": "Tool `get-annotated-message` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "get-resource-links",
+      "title": "Tool `get-resource-links` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "get-resource-reference",
+      "title": "Tool `get-resource-reference` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "get-structured-content",
+      "title": "Tool `get-structured-content` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "get-sum",
+      "title": "Tool `get-sum` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "gzip-file-as-resource",
+      "title": "Tool `gzip-file-as-resource` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "simulate-research-query",
+      "title": "Tool `simulate-research-query` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    },
+    {
+      "severity": "info",
+      "category": "loose-schema",
+      "target": "trigger-long-running-operation",
+      "title": "Tool `trigger-long-running-operation` input schema allows arbitrary extra properties",
+      "description": "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
+      "recommendation": "Set additionalProperties:false and mark required fields.",
+      "source": "static"
+    }
+  ]
+}

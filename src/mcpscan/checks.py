@@ -95,7 +95,7 @@ def check_tool(tool: dict) -> list[dict]:
     props = (schema.get("properties") or {}) if isinstance(schema, dict) else {}
     if isinstance(schema, dict) and props and schema.get("additionalProperties") is not False:
         out.append(_finding(
-            "low", "loose-schema", name,
+            "info", "loose-schema", name,
             f"Tool `{name}` input schema allows arbitrary extra properties",
             "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
             "Set additionalProperties:false and mark required fields."))
