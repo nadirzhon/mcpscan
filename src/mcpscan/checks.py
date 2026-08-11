@@ -29,13 +29,26 @@ _INJECTION = re.compile(
 )
 
 # --- capabilities that are dangerous without explicit guardrails ---------------
+# Разделены на «серьёзные» (реально мутируют/крадут — остаются high) и
+# «egress» (сетевой выход — сам по себе не эксплуатируем у read-only инструмента).
 _DANGEROUS = [
-    ("command-execution", re.compile(r"(?i)\b(exec|execute|shell|bash|subprocess|system\(|run.?command|eval|spawn)\b")),
+    ("command-execution", re.compile(r"(?i)\b(exec|execute|shell|bash|subprocess|system\(|run.?command|spawn)\b")),
     ("file-write-delete", re.compile(r"(?i)\b(delete|remove|unlink|rmdir|overwrite|write.?file|truncate)\b")),
-    ("network-egress", re.compile(r"(?i)\b(fetch|http|request|curl|download|upload|post to|send to)\b")),
+    ("network-egress", re.compile(r"(?i)\b(curl|download|upload|post to|send to|exfiltrat)\b")),
     ("credential-access", re.compile(r"(?i)\b(secret|token|password|api.?key|credential|private.?key|\.env)\b")),
-    ("code-execution", re.compile(r"(?i)\b(python|node|interpreter|arbitrary code|run.?code)\b")),
+    # code-execution: только ЯВНОЕ выполнение кода, а не упоминание языка.
+    # («Python» как параметр фильтра примеров — не выполнение и не FP.)
+    ("code-execution", re.compile(r"(?i)\b(arbitrary code|run.?code|execute.?code|code.?execution|eval\()\b")),
 ]
+
+# Реально опасные категории: даже у read-only-инструмента остаются high/medium.
+_SERIOUS = {"command-execution", "code-execution", "file-write-delete", "credential-access"}
+
+# Глаголы read-only инструмента (поиск/чтение/справка). Если имя таково и
+# из опасного нашёлся только сетевой выход — это дизайн, а не уязвимость → info.
+_READONLY_NAME = re.compile(
+    r"(?i)\b(search|find|lookup|look_?up|query|get|list|read|browse|fetch|"
+    r"retrieve|sample|example|docs?|documentation|reference|describe|status|info)\b")
 
 # schema field names that are risky when accepted as free strings
 _RISKY_PARAMS = re.compile(r"(?i)^(cmd|command|path|file|filename|url|uri|query|sql|code|script|host|target)s?$")
@@ -83,13 +96,25 @@ def check_tool(tool: dict) -> list[dict]:
     haystack = f"{name} {desc}"
     dangerous = [cat for cat, rx in _DANGEROUS if rx.search(haystack)]
     if dangerous:
-        sev = "high" if {"command-execution", "code-execution"} & set(dangerous) else "medium"
-        out.append(_finding(
-            sev, "dangerous-capability", name,
-            f"Powerful capability exposed: {', '.join(dangerous)}",
-            f"Tool `{name}` appears to offer {', '.join(dangerous)}. In an agent, a prompt-injected "
-            "instruction could invoke it against the operator's intent.",
-            "Gate this tool behind an authorization scope or human confirmation; constrain its inputs."))
+        serious = _SERIOUS & set(dangerous)
+        read_only = bool(_READONLY_NAME.search(name)) and not serious
+        if read_only:
+            # поиск/справка/fetch с сетевым выходом — нормальная функция, не баг.
+            out.append(_finding(
+                "info", "capability-note", name,
+                f"Read-only tool with {', '.join(dangerous)} (expected for its function)",
+                f"Tool `{name}` looks read-only (search/fetch/docs). Its "
+                f"{', '.join(dangerous)} is inherent to that role, not an exploitable flaw. "
+                "Noted for surface mapping; verify only if it can reach internal networks (SSRF).",
+                "If it fetches user-supplied URLs, restrict egress to an allowlist (SSRF hardening)."))
+        else:
+            sev = "high" if {"command-execution", "code-execution"} & set(dangerous) else "medium"
+            out.append(_finding(
+                sev, "dangerous-capability", name,
+                f"Powerful capability exposed: {', '.join(dangerous)}",
+                f"Tool `{name}` appears to offer {', '.join(dangerous)}. In an agent, a prompt-injected "
+                "instruction could invoke it against the operator's intent.",
+                "Gate this tool behind an authorization scope or human confirmation; constrain its inputs."))
 
     schema = tool.get("inputSchema") or tool.get("input_schema") or {}
     props = (schema.get("properties") or {}) if isinstance(schema, dict) else {}
