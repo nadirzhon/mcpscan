@@ -50,8 +50,13 @@ _READONLY_NAME = re.compile(
     r"(?i)\b(search|find|lookup|look_?up|query|get|list|read|browse|fetch|"
     r"retrieve|sample|example|docs?|documentation|reference|describe|status|info)\b")
 
-# schema field names that are risky when accepted as free strings
-_RISKY_PARAMS = re.compile(r"(?i)^(cmd|command|path|file|filename|url|uri|query|sql|code|script|host|target)s?$")
+# schema field names that are a REAL injection/traversal/SSRF surface as free strings
+_TRAVERSAL_PARAMS = re.compile(
+    r"(?i)^(cmd|command|path|file|filename|url|uri|sql|code|script|host|target|dir|directory|endpoint|redirect)s?$")
+# free-text params that are EXPECTED to be unconstrained (search boxes etc.) —
+# a free-form `query` on a search tool is design, not a vulnerability.
+_SEARCH_PARAMS = re.compile(
+    r"(?i)^(query|q|search|keyword|term|text|prompt|input|topic|question|message|content)s?$")
 
 _MAX_DESC = 1500  # descriptions far longer than needed are a poisoning smell
 
@@ -125,15 +130,23 @@ def check_tool(tool: dict) -> list[dict]:
             "The input schema does not set additionalProperties:false, so unexpected fields pass through.",
             "Set additionalProperties:false and mark required fields."))
     for pname, pspec in props.items():
-        if (_RISKY_PARAMS.match(pname) and isinstance(pspec, dict)
-                and pspec.get("type") == "string"
+        if not (isinstance(pspec, dict) and pspec.get("type") == "string"
                 and not any(k in pspec for k in ("enum", "pattern", "format"))):
+            continue
+        if _TRAVERSAL_PARAMS.match(pname):
             out.append(_finding(
                 "medium", "unconstrained-input", name,
                 f"Unconstrained `{pname}` parameter on `{name}`",
-                f"`{pname}` is a free-form string with no enum/pattern/format — a natural injection or "
-                "traversal surface (paths, commands, URLs, queries).",
+                f"`{pname}` is a free-form string with no enum/pattern/format — a real "
+                "traversal / SSRF / injection surface (paths, commands, URLs, SQL).",
                 f"Constrain `{pname}` with a pattern/enum, or validate and sandbox it server-side."))
+        elif _SEARCH_PARAMS.match(pname):
+            out.append(_finding(
+                "info", "free-text-input", name,
+                f"Free-text `{pname}` on `{name}` (expected for a search/query tool)",
+                f"`{pname}` is unconstrained, but a free-form search/query field is normal design, "
+                "not a vulnerability. Noted for surface mapping only.",
+                "No action needed unless this value is later used to build a path/command/SQL."))
     return out
 
 

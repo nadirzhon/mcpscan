@@ -61,3 +61,41 @@ def test_surface_covers_resources_and_prompts():
     }
     cats = [f["category"] for f in check_surface(surface)]
     assert "tool-poisoning" in cats
+
+
+def _sev_for(findings, category):
+    return next((f["severity"] for f in findings if f["category"] == category), None)
+
+
+def test_language_mention_is_not_code_execution():
+    # регресс: описание с "Python/Node" у поискового инструмента ≠ выполнение кода
+    t = _tool("code_sample_search", "Search code samples; filter by Python, Node, or C#.",
+              {"type": "object", "properties": {"query": {"type": "string"}},
+               "additionalProperties": False})
+    cats = [f["category"] for f in check_tool(t)]
+    assert "dangerous-capability" not in cats  # был ложный CRITICAL code-execution
+
+
+def test_real_shell_exec_stays_high():
+    t = _tool("run_shell", "Execute a shell command on the host.",
+              {"type": "object", "properties": {"cmd": {"type": "string"}},
+               "additionalProperties": False})
+    assert _sev_for(check_tool(t), "dangerous-capability") == "high"
+
+
+def test_readonly_fetch_egress_is_info_not_high():
+    t = _tool("docs_fetch", "Download and return a documentation page.",
+              {"type": "object", "properties": {"page": {"type": "string"}},
+               "additionalProperties": False})
+    cats = {f["category"]: f["severity"] for f in check_tool(t)}
+    assert cats.get("dangerous-capability") != "high"
+
+
+def test_search_query_is_info_but_url_is_medium():
+    # свободный query у поиска — info; url у fetch — реальный SSRF surface → medium
+    q = _tool("docs_search", "Search docs.",
+              {"type": "object", "properties": {"query": {"type": "string"}}})
+    assert _sev_for(check_tool(q), "free-text-input") == "info"
+    u = _tool("page_fetch", "Fetch a page.",
+              {"type": "object", "properties": {"url": {"type": "string"}}})
+    assert _sev_for(check_tool(u), "unconstrained-input") == "medium"
