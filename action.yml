@@ -39,7 +39,7 @@ runs:
         set +e
         AI_ARGS=()
         if [ "${{ inputs.ai }}" = "true" ]; then AI_ARGS+=(--ai); fi
-        mcpscan "${{ inputs.server }}" --sarif "${AI_ARGS[@]}" > mcpscan.sarif
+        mcpscan "${{ inputs.server }}" --sarif --fail-on "${{ inputs.fail-on }}" "${AI_ARGS[@]}" > mcpscan.sarif
         status=$?
         exit $status
 
