@@ -46,7 +46,15 @@ def _run_discovery(args) -> int:
 
 
 def _run(args) -> int:
-    if args.discover:\n        if args.server:\n            print("error: use either SERVER or --discover, not both", file=sys.stderr)\n            return 2\n        return _run_discovery(args)\n    if not args.server:\n        print("error: SERVER is required unless --discover is used", file=sys.stderr)\n        return 2\n    try:
+    if args.discover:
+        if args.server:
+            print("error: use either SERVER or --discover, not both", file=sys.stderr)
+            return 2
+        return _run_discovery(args)
+    if not args.server:
+        print("error: SERVER is required unless --discover is used", file=sys.stderr)
+        return 2
+    try:
         surface = asyncio.run(fetch_surface(args.server))
     except Exception as e:  # noqa: BLE001
         print(f"error: could not connect to MCP server {args.server!r}: {e}", file=sys.stderr)
