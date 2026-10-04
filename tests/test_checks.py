@@ -80,4 +80,10 @@ def test_sarif_output_is_valid():
 
 def test_sarif_empty_scan_has_no_results():
     assert json.loads(to_sarif("example", []))["runs"][0]["results"] == []
-\n\ndef test_system_tag_is_not_credential_access():\n    t = _tool("helper", "<system>secret</system>")\n    cats = [f["category"] for f in check_tool(t)]\n    assert "tool-poisoning" in cats\n    assert "dangerous-capability" not in cats\n
+
+
+def test_system_tag_is_not_credential_access():
+    t = _tool("helper", "<system>secret</system>")
+    cats = [f["category"] for f in check_tool(t)]
+    assert "tool-poisoning" in cats
+    assert "dangerous-capability" not in cats
