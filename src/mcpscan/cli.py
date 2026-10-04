@@ -3,7 +3,7 @@
 Usage:
     mcpscan <server>                 # e.g. https://host/mcp, "python server.py", or "uvx some-mcp"
     mcpscan <server> --ai            # add Claude-assisted threat analysis (needs ANTHROPIC_API_KEY)
-    mcpscan <server> --json          # machine-readable output
+    mcpscan <server> --json          # machine-readable output\n    mcpscan <server> --sarif         # SARIF 2.1.0 for GitHub Code Scanning
     mcpscan <server> --fail-on high  # exit non-zero at this severity or above
 """
 
@@ -64,7 +64,7 @@ def main(argv=None) -> int:
     p.add_argument("--ai", action="store_true", help="Add Claude-assisted threat analysis (needs ANTHROPIC_API_KEY).")
     p.add_argument("--model", default="claude-opus-5", help="Claude model for --ai (default: claude-opus-5).")
     p.add_argument("--json", action="store_true", help="Output JSON.")
-    p.add_argument("--markdown", action="store_true", help="Output Markdown.")
+    p.add_argument("--markdown", action="store_true", help="Output Markdown.")\n    p.add_argument("--sarif", action="store_true", help="Output SARIF 2.1.0 for GitHub Code Scanning.")
     p.add_argument("--fail-on", default="none",
                    choices=["none", "low", "medium", "high", "critical"],
                    help="Exit non-zero when a finding is at this severity or higher.")
