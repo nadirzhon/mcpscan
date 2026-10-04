@@ -1,0 +1,6 @@
+{
+  "servers": [
+    {"name": "filesystem", "server": "npx -y @modelcontextprotocol/server-filesystem /tmp"},
+    {"name": "remote-example", "server": "https://example.com/mcp"}
+  ]
+}
