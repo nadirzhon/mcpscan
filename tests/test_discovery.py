@@ -1,5 +1,7 @@
 import json
 
+import asyncio
+
 import pytest
 
 from mcpscan import discovery
@@ -24,15 +26,14 @@ def test_load_inventory_rejects_duplicates(tmp_path):
         discovery.load_inventory(str(path))
 
 
-@pytest.mark.asyncio
-async def test_scan_inventory_is_read_only_and_collects_failures(monkeypatch):
+def test_scan_inventory_is_read_only_and_collects_failures(monkeypatch):
     async def fake_fetch(server):
         if server == "bad":
             raise RuntimeError("connection refused")
         return {"tools": [{"name": "safe", "description": "safe", "inputSchema": {}}], "resources": [], "prompts": []}
 
     monkeypatch.setattr(discovery, "fetch_surface", fake_fetch)
-    scans = await discovery.scan_inventory([
+    scans = asyncio.run(discovery.scan_inventory([
         {"name": "good", "server": "good"},
         {"name": "bad", "server": "bad"},
     ], max_concurrency=2)
