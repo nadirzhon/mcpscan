@@ -48,6 +48,14 @@
       "role": "static-security-checks",
       "benchmark_adapter": "manual-required",
       "notes": "Checks tool poisoning, SSRF, credential leaks, input validation and related classes."
+    },
+    {
+      "id": "snyk-agent-scan",
+      "repository": "snyk/agent-scan",
+      "source": "https://github.com/snyk/agent-scan",
+      "role": "agent-and-MCP-discovery",
+      "benchmark_adapter": "manual-required",
+      "notes": "Scans agent components including MCP servers and skills; documented capabilities are not treated as measured corpus results."
     }
   ]
 }
