@@ -1,6 +1,6 @@
 [project]
 name = "mcpsecscan"
-version = "0.2.0"
+version = "0.2.1"
 description = "Security scanner for MCP (Model Context Protocol) servers — detects tool poisoning, over-privileged tools, hidden instructions & injection surfaces."
 readme = "README.md"
 license = { text = "MIT" }
