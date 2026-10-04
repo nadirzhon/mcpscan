@@ -27,7 +27,7 @@ def load_inventory(path: str) -> list[dict]:
             server = str(item.get("server", "")).strip()
             name = str(item.get("name", "")).strip() or server
         else:
-            raise ValueError(f"inventory entry {index} must be a string or object")
+            raise TypeError(f"inventory entry {index} must be a string or object")
         if not server:
             raise ValueError(f"inventory entry {index} has no server")
         if name in seen:
