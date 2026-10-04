@@ -3,6 +3,7 @@ from pathlib import Path
 
 from benchmarks.cases import CASES
 from benchmarks.run import run_benchmark
+from mcpscan.checks import check_surface
 
 MANIFEST = json.loads((Path(__file__).parents[1] / "benchmarks" / "manifest.json").read_text())
 
@@ -15,7 +16,7 @@ def test_manifest_is_complete():
 def test_benchmark_cases_match_expected_categories():
     expected = {case["id"]: set(case["expected"]) for case in MANIFEST["cases"]}
     for case_id, surface in CASES.items():
-        categories = {f["category"] for f in __import__("mcpscan.checks", fromlist=["check_surface"]).check_surface(surface)}
+        categories = {finding["category"] for finding in check_surface(surface)}
         assert categories == expected[case_id], case_id
 
 
