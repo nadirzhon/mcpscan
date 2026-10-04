@@ -70,6 +70,7 @@
     {
       "id": "unconstrained-url",
       "expected": [
+        "dangerous-capability",
         "unconstrained-input"
       ]
     },
