@@ -1,8 +1,8 @@
-"""Severity ordering and report rendering (text + Markdown + JSON)."""
+"""Severity ordering and report rendering (text + Markdown + JSON + SARIF)."""
 
 from __future__ import annotations
 
-import json
+import json\n\n_SARIF_LEVEL = {"critical": "error", "high": "error", "medium": "warning", "low": "note", "info": "note"}
 
 SEVERITY_ORDER = ["info", "low", "medium", "high", "critical"]
 _RANK = {s: i for i, s in enumerate(SEVERITY_ORDER)}
