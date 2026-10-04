@@ -1,6 +1,5 @@
-import json
-
 import asyncio
+import json
 
 import pytest
 
@@ -33,10 +32,15 @@ def test_scan_inventory_is_read_only_and_collects_failures(monkeypatch):
         return {"tools": [{"name": "safe", "description": "safe", "inputSchema": {}}], "resources": [], "prompts": []}
 
     monkeypatch.setattr(discovery, "fetch_surface", fake_fetch)
-    scans = asyncio.run(discovery.scan_inventory([
-        {"name": "good", "server": "good"},
-        {"name": "bad", "server": "bad"},
-    ], max_concurrency=2)
+    scans = asyncio.run(
+        discovery.scan_inventory(
+            [
+                {"name": "good", "server": "good"},
+                {"name": "bad", "server": "bad"},
+            ],
+            max_concurrency=2,
+        )
+    )
     assert scans[0]["surface"]["tools"] == 1
     assert scans[0]["findings"] == []
     assert "connection refused" in scans[1]["error"]
@@ -44,6 +48,7 @@ def test_scan_inventory_is_read_only_and_collects_failures(monkeypatch):
 
 def test_discovery_sarif_has_one_run_per_server():
     from mcpscan.report import to_sarif_discovery
+
     doc = json.loads(to_sarif_discovery([
         {"name": "one", "server": "one", "findings": []},
         {"name": "two", "server": "two", "findings": [], "error": "failed"},
@@ -56,6 +61,7 @@ def test_discovery_sarif_has_one_run_per_server():
 
 def test_discovery_json_aggregates_counts():
     from mcpscan.report import to_discovery_json
+
     doc = json.loads(to_discovery_json([
         {"name": "one", "server": "one", "findings": [{"severity": "high"}]},
         {"name": "two", "server": "two", "findings": [], "error": "failed"},
