@@ -1,3 +1,5 @@
+import json
+
 from mcpscan.checks import check_surface, check_tool
 
 
@@ -62,9 +64,10 @@ def test_surface_covers_resources_and_prompts():
     cats = [f["category"] for f in check_surface(surface)]
     assert "tool-poisoning" in cats
 
+
 def test_sarif_output_is_valid():
-    import json
     from mcpscan.report import to_sarif
+
     doc = json.loads(to_sarif("example", [{
         "severity": "high", "category": "tool-poisoning", "target": "search",
         "title": "Instruction-like text", "description": "Model-directed instructions.",
@@ -77,6 +80,4 @@ def test_sarif_output_is_valid():
 
 
 def test_sarif_empty_scan_has_no_results():
-    import json
-    from mcpscan.report import to_sarif
     assert json.loads(to_sarif("example", []))["runs"][0]["results"] == []
