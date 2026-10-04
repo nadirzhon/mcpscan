@@ -11,7 +11,7 @@ import argparse
 import json
 from pathlib import Path
 
-from benchmarks.cases import CASES
+if __package__:\n    from benchmarks.cases import CASES\nelse:\n    from cases import CASES
 from mcpscan.checks import check_surface
 
 
