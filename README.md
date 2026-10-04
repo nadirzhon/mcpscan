@@ -187,3 +187,8 @@ ruff check .
 ## License
 
 MIT — see [LICENSE](LICENSE). For authorized security assessment and research.
+
+
+## Security Benchmark
+
+`mcpscan` ships a deterministic synthetic benchmark in [`benchmarks/`](benchmarks/). It covers hidden Unicode, tool poisoning, dangerous capabilities, loose schemas, unconstrained risky parameters, and oversized descriptions. Run `pytest -q tests/test_benchmark.py` to execute the regression suite. The corpus is versioned separately from AI-assisted analysis so results remain reproducible.
