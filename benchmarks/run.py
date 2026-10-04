@@ -13,7 +13,7 @@ from pathlib import Path
 
 from mcpscan.checks import check_surface
 
-from cases import CASES
+from benchmarks.cases import CASES
 
 
 def load_manifest() -> dict:
