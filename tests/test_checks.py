@@ -1,6 +1,7 @@
 import json
 
 from mcpscan.checks import check_surface, check_tool
+from mcpscan.report import to_sarif
 
 
 def _tool(name, description="", schema=None):
@@ -66,8 +67,6 @@ def test_surface_covers_resources_and_prompts():
 
 
 def test_sarif_output_is_valid():
-    from mcpscan.report import to_sarif
-
     doc = json.loads(to_sarif("example", [{
         "severity": "high", "category": "tool-poisoning", "target": "search",
         "title": "Instruction-like text", "description": "Model-directed instructions.",
