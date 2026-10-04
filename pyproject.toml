@@ -1,6 +1,6 @@
 [project]
 name = "mcpsecscan"
-version = "0.1.0"
+version = "0.2.0"
 description = "Security scanner for MCP (Model Context Protocol) servers — detects tool poisoning, over-privileged tools, hidden instructions & injection surfaces."
 readme = "README.md"
 license = { text = "MIT" }
@@ -8,7 +8,7 @@ requires-python = ">=3.10"
 authors = [{ name = "nadirzhon" }]
 keywords = [
     "mcp", "model-context-protocol", "security", "scanner", "ai-security",
-    "tool-poisoning", "prompt-injection", "llm-security", "appsec", "claude",
+    "tool-poisoning", "prompt-injection", "llm-security", "appsec", "claude", "sarif", "github-actions", "code-scanning",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
