@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "name": "mcpscan-security-benchmark",
+  "description": "Small, deterministic MCP security corpus for regression testing.",
+  "cases": [
+    {
+      "id": "clean-basic-tool",
+      "expected": []
+    },
+    {
+      "id": "hidden-zero-width",
+      "expected": [
+        "hidden-text"
+      ]
+    },
+    {
+      "id": "hidden-bidi",
+      "expected": [
+        "hidden-text"
+      ]
+    },
+    {
+      "id": "instruction-ignore-previous",
+      "expected": [
+        "tool-poisoning"
+      ]
+    },
+    {
+      "id": "instruction-system-tag",
+      "expected": [
+        "tool-poisoning"
+      ]
+    },
+    {
+      "id": "dangerous-shell",
+      "expected": [
+        "dangerous-capability"
+      ]
+    },
+    {
+      "id": "dangerous-file-write",
+      "expected": [
+        "dangerous-capability"
+      ]
+    },
+    {
+      "id": "dangerous-network",
+      "expected": [
+        "dangerous-capability"
+      ]
+    },
+    {
+      "id": "credential-access",
+      "expected": [
+        "dangerous-capability"
+      ]
+    },
+    {
+      "id": "loose-schema",
+      "expected": [
+        "loose-schema"
+      ]
+    },
+    {
+      "id": "unconstrained-path",
+      "expected": [
+        "unconstrained-input"
+      ]
+    },
+    {
+      "id": "unconstrained-url",
+      "expected": [
+        "unconstrained-input"
+      ]
+    },
+    {
+      "id": "long-description",
+      "expected": [
+        "oversized-description"
+      ]
+    },
+    {
+      "id": "resource-poisoning",
+      "expected": [
+        "tool-poisoning"
+      ]
+    },
+    {
+      "id": "prompt-poisoning",
+      "expected": [
+        "tool-poisoning"
+      ]
+    },
+    {
+      "id": "multi-signal-tool",
+      "expected": [
+        "hidden-text",
+        "tool-poisoning",
+        "dangerous-capability"
+      ]
+    }
+  ]
+}
