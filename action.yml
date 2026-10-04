@@ -20,7 +20,7 @@ inputs:
   version:
     description: mcpscan git tag or ref to install
     required: false
-    default: v0.2.0
+    default: v0.2.1
 
 runs:
   using: composite
