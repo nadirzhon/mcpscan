@@ -69,7 +69,9 @@ def _run(args) -> int:
         else:
             try:
                 import anthropic
+
                 from .ai import analyze
+
                 client = anthropic.Anthropic(api_key=key)
                 findings.extend(analyze(client, args.model, surface))
             except Exception as e:  # noqa: BLE001
@@ -103,9 +105,7 @@ def main(argv=None) -> int:
     p.add_argument("--json", action="store_true", help="Output JSON.")
     p.add_argument("--markdown", action="store_true", help="Output Markdown.")
     p.add_argument("--sarif", action="store_true", help="Output SARIF 2.1.0 for GitHub Code Scanning.")
-    p.add_argument("--fail-on", default="none",
-                   choices=["none", "low", "medium", "high", "critical"],
-                   help="Exit non-zero when a finding is at this severity or higher.")
+    p.add_argument("--fail-on", default="none", choices=["none", "low", "medium", "high", "critical"], help="Exit non-zero when a finding is at this severity or higher.")
     p.add_argument("--version", action="version", version=f"mcpscan {__version__}")
     return _run(p.parse_args(argv))
 
