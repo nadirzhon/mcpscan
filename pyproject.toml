@@ -23,7 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 ai = ["anthropic>=0.109"]
-dev = ["pytest>=8.0", "ruff>=0.6", "anthropic>=0.109"]
+dev = ["pytest>=8.0", "ruff>=0.6", "anthropic>=0.109", "build>=1.2"]
 
 [project.scripts]
 mcpscan = "mcpscan.cli:main"
@@ -42,6 +42,7 @@ packages = ["src/mcpscan"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 115

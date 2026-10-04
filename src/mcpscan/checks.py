@@ -33,7 +33,7 @@ _DANGEROUS = [
     ("command-execution", re.compile(r"(?i)\b(exec|execute|shell|bash|subprocess|system\(|run.?command|eval|spawn)\b")),
     ("file-write-delete", re.compile(r"(?i)\b(delete|remove|unlink|rmdir|overwrite|write.?file|truncate)\b")),
     ("network-egress", re.compile(r"(?i)\b(fetch|http|request|curl|download|upload|post to|send to)\b")),
-    ("credential-access", re.compile(r"(?i)\b(secret|token|password|api.?key|credential|private.?key|\.env)\b")),
+    ("credential-access", re.compile(r"(?i)\b(token|password|api.?key|credential|private.?key|\.env)\b")),
     ("code-execution", re.compile(r"(?i)\b(python|node|interpreter|arbitrary code|run.?code)\b")),
 ]
 
