@@ -20,7 +20,40 @@ from .checks import check_surface
 from .connect import fetch_surface
 
 
+def _run_discovery(args) -> int:
+    from .discovery import load_inventory, scan_inventory
+
+    try:
+        entries = load_inventory(args.discover)
+        scans = asyncio.run(scan_inventory(entries, args.max_concurrency))
+    except Exception as e:  # noqa: BLE001
+        print(f"error: invalid discovery inventory: {e}", file=sys.stderr)
+        return 2
+
+    if args.sarif:
+        print(report.to_sarif_discovery(scans))
+    else:
+        print(report.to_discovery_json(scans))
+
+    if any(s.get("error") for s in scans):
+        return 2
+    findings = [f for s in scans for f in s.get("findings", [])]
+    if args.fail_on != "none":
+        threshold = report.rank(args.fail_on)
+        if any(report.rank(f.get("severity", "info")) >= threshold for f in findings):
+            return 1
+    return 0
+
+
 def _run(args) -> int:
+    if args.discover:
+        if args.server:
+            print("error: use either SERVER or --discover, not both", file=sys.stderr)
+            return 2
+        return _run_discovery(args)
+    if not args.server:
+        print("error: SERVER is required unless --discover is used", file=sys.stderr)
+        return 2
     try:
         surface = asyncio.run(fetch_surface(args.server))
     except Exception as e:  # noqa: BLE001
@@ -62,7 +95,9 @@ def _run(args) -> int:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="mcpscan", description="Security scanner for MCP servers.")
-    p.add_argument("server", help="MCP server: an http(s) URL, a server script path, or a stdio command string.")
+    p.add_argument("server", nargs="?", help="MCP server: an http(s) URL, a server script path, or a stdio command string.")
+    p.add_argument("--discover", metavar="INVENTORY", help="Scan an explicit JSON MCP inventory (authorized targets only).")
+    p.add_argument("--max-concurrency", type=int, default=4, help="Maximum concurrent discovery scans (default: 4).")
     p.add_argument("--ai", action="store_true", help="Add Claude-assisted threat analysis (needs ANTHROPIC_API_KEY).")
     p.add_argument("--model", default="claude-opus-5", help="Claude model for --ai (default: claude-opus-5).")
     p.add_argument("--json", action="store_true", help="Output JSON.")

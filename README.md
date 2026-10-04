@@ -73,9 +73,31 @@ uvx --with 'mcpsecscan[ai]' mcpsecscan https://some-host/mcp --ai
 | `--model` | Claude model for `--ai` (default `claude-opus-5`) |
 | `--json` | Machine-readable output |
 | `--markdown` | Markdown report (for PRs / docs) |
-| `--fail-on` | Exit non-zero at this severity or higher: `none`/`low`/`medium`/`high`/`critical` |
+| `--sarif` | SARIF 2.1.0 output for GitHub Code Scanning |\n| `--discover` | Scan an explicit JSON inventory of authorized MCP servers |\n| `--max-concurrency` | Maximum concurrent discovery scans (default: 4) |\n| `--fail-on` | Exit non-zero at this severity or higher: `none`/`low`/`medium`/`high`/`critical` |
 
 Use `--fail-on high` in CI to block merging an MCP server that regresses.
+
+### Discovery mode
+
+For an authorized inventory of multiple MCP servers, use a local JSON manifest. Discovery is explicit and read-only: mcpscan only connects to the servers listed in the inventory and never calls their tools.
+
+```bash
+mcpscan --discover examples/inventory.json --json
+mcpscan --discover examples/inventory.json --sarif --max-concurrency 4
+```
+
+Inventory entries can be strings or named objects:
+
+```json
+{
+  "servers": [
+    {"name": "filesystem", "server": "npx -y @modelcontextprotocol/server-filesystem /tmp"},
+    {"name": "internal-api", "server": "https://internal.example/mcp"}
+  ]
+}
+```
+
+The aggregate JSON report records successful/failed servers and findings per target. Aggregate SARIF emits one uniquely identified analysis run per server.
 
 ## What the checks cover
 

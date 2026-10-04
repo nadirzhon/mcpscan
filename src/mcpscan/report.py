@@ -118,6 +118,43 @@ def to_sarif(server: str, findings: list[dict]) -> str:
     }
     return json.dumps(document, indent=2, ensure_ascii=False)
 
+def to_sarif_discovery(scans: list[dict]) -> str:
+    """Render an authorized multi-server inventory as one SARIF log."""
+    runs = []
+    for scan in scans:
+        server = scan["server"]
+        findings = scan.get("findings", [])
+        doc = json.loads(to_sarif(server, findings))
+        run = doc["runs"][0]
+        run["automationDetails"] = {"id": f"mcpscan/discovery/{scan['name']}"}
+        if scan.get("error"):
+            run.setdefault("invocations", []).append({"executionSuccessful": False,
+                                                       "commandLine": server,
+                                                       "toolExecutionNotifications": [{
+                                                           "message": {"text": scan["error"]},
+                                                           "level": "error",
+                                                       }]})
+        runs.append(run)
+    document = {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": runs,
+    }
+    return json.dumps(document, indent=2, ensure_ascii=False)
+
+
+def to_discovery_json(scans: list[dict]) -> str:
+    """Render a deterministic aggregate report for an MCP inventory."""
+    total_findings = sum(len(s.get("findings", [])) for s in scans)
+    return json.dumps({
+        "total_servers": len(scans),
+        "successful_servers": sum(1 for s in scans if not s.get("error")),
+        "failed_servers": sum(1 for s in scans if s.get("error")),
+        "total_findings": total_findings,
+        "servers": scans,
+    }, indent=2, ensure_ascii=False)
+
+
 def to_terminal(server: str, findings: list[dict], surface_counts: dict) -> str:
     lines = [
         "",
