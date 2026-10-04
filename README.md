@@ -42,8 +42,8 @@ Web apps have scanners for this. MCP servers, so far, mostly don't. `mcpscan` is
 ## Install & run
 
 ```bash
-pip install mcpsecscan          # on PyPI (name `mcpscan` was taken — command is still `mcpscan`)
-uvx mcpsecscan <server>         # run without installing
+pip install mcpsecscan
+uvx mcpsecscan <server>
 uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan <server>   # from source
 ```
 
@@ -73,7 +73,10 @@ uvx --with 'mcpsecscan[ai]' mcpsecscan https://some-host/mcp --ai
 | `--model` | Claude model for `--ai` (default `claude-opus-5`) |
 | `--json` | Machine-readable output |
 | `--markdown` | Markdown report (for PRs / docs) |
-| `--sarif` | SARIF 2.1.0 output for GitHub Code Scanning |\n| `--discover` | Scan an explicit JSON inventory of authorized MCP servers |\n| `--max-concurrency` | Maximum concurrent discovery scans (default: 4) |\n| `--fail-on` | Exit non-zero at this severity or higher: `none`/`low`/`medium`/`high`/`critical` |
+| `--sarif` | SARIF 2.1.0 output for GitHub Code Scanning |
+| `--discover` | Scan an explicit JSON inventory of authorized MCP servers |
+| `--max-concurrency` | Maximum concurrent discovery scans (default: 4) |
+| `--fail-on` | Exit non-zero at this severity or higher: `none`/`low`/`medium`/`high`/`critical` |
 
 Use `--fail-on high` in CI to block merging an MCP server that regresses.
 
