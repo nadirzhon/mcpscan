@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "methodology": {
+    "purpose": "Compare MCP security scanners without treating vendor claims as measured benchmark results.",
+    "corpus": "benchmarks/manifest.json",
+    "metrics": [
+      "case_detection",
+      "category_detection",
+      "false_positive_rate",
+      "runtime_seconds"
+    ],
+    "rules": [
+      "Run each scanner against the same benchmark corpus.",
+      "Record stdout, stderr, exit code, version, and runtime.",
+      "Map native findings to benchmark categories using explicit adapters.",
+      "Do not infer a detection from documentation alone.",
+      "Unavailable tools are recorded as unavailable, never as zero detections."
+    ]
+  },
+  "scanners": [
+    {
+      "id": "mcpscan",
+      "repository": "nadirzhon/mcpscan",
+      "source": "https://github.com/nadirzhon/mcpscan",
+      "role": "baseline",
+      "benchmark_adapter": "native"
+    },
+    {
+      "id": "mcp-security-scanner",
+      "repository": "badchars/mcp-security-scanner",
+      "source": "https://github.com/badchars/mcp-security-scanner",
+      "role": "runtime-and-source",
+      "benchmark_adapter": "manual-required",
+      "notes": "Broad runtime, SAST, configuration and supply-chain scanner."
+    },
+    {
+      "id": "mcp-scan",
+      "repository": "rhilgenkamp/mcp-scan",
+      "source": "https://github.com/rhilgenkamp/mcp-scan",
+      "role": "runtime-and-client-discovery",
+      "benchmark_adapter": "manual-required",
+      "notes": "Static/dynamic scanning plus proxy and client configuration discovery."
+    },
+    {
+      "id": "mcp-scanner",
+      "repository": "MK-ScorpioSec/mcp-scanner",
+      "source": "https://github.com/MK-ScorpioSec/mcp-scanner",
+      "role": "static-security-checks",
+      "benchmark_adapter": "manual-required",
+      "notes": "Checks tool poisoning, SSRF, credential leaks, input validation and related classes."
+    }
+  ]
+}
