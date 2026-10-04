@@ -12,6 +12,7 @@ agent to it.
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![MCP](https://img.shields.io/badge/MCP-security-8A63D2)
 ![CI](https://github.com/nadirzhon/mcpscan/actions/workflows/ci.yml/badge.svg)
+![PyPI](https://img.shields.io/pypi/v/mcpsecscan)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 <br>
@@ -139,7 +140,7 @@ With `--ai`, Claude adds reasoning-based findings on top (tool combinations, aut
 Run against the official MCP reference servers (fully reproducible):
 
 ```bash
-# Anthropic's filesystem server — 25 findings
+# Anthropic's filesystem server — 26 findings
 uvx --from git+https://github.com/nadirzhon/mcpscan mcpscan \
   "npx -y @modelcontextprotocol/server-filesystem /tmp"
 # → 12 × unconstrained-input (every path param is a traversal surface),
@@ -173,7 +174,7 @@ jobs:
   mcpscan:
     runs-on: ubuntu-latest
     steps:
-      - uses: nadirzhon/mcpscan@v0.2.0
+      - uses: nadirzhon/mcpscan@v0.2.1
         with:
           server: https://example.com/mcp
           fail-on: high
