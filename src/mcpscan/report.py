@@ -1,8 +1,10 @@
-"""Severity ordering and report rendering (text + Markdown + JSON)."""
+"""Severity ordering and report rendering (text + Markdown + JSON + SARIF)."""
 
 from __future__ import annotations
 
 import json
+
+_SARIF_LEVEL = {"critical": "error", "high": "error", "medium": "warning", "low": "note", "info": "note"}
 
 SEVERITY_ORDER = ["info", "low", "medium", "high", "critical"]
 _RANK = {s: i for i, s in enumerate(SEVERITY_ORDER)}
@@ -29,6 +31,48 @@ def to_json(server: str, findings: list[dict]) -> str:
         "findings": sort_findings(findings),
     }, indent=2, ensure_ascii=False)
 
+
+def to_sarif(server: str, findings: list[dict]) -> str:
+    """Render findings as SARIF 2.1.0 for GitHub Code Scanning and other tools."""
+    rules = {}
+    results = []
+    for f in sort_findings(findings):
+        category = f.get("category", "unknown")
+        rule_id = f"MCPSCAN/{category}"
+        rules.setdefault(rule_id, {
+            "id": rule_id,
+            "name": category,
+            "shortDescription": {"text": f.get("title", category)},
+            "helpUri": "https://github.com/nadirzhon/mcpscan#what-the-checks-cover",
+        })
+        results.append({
+            "ruleId": rule_id,
+            "level": _SARIF_LEVEL.get(f.get("severity", "info"), "note"),
+            "message": {"text": (
+                f"{f.get('description', '')} Recommendation: {f.get('recommendation', '')}"
+            ).strip()},
+            "properties": {
+                "severity": f.get("severity", "info"),
+                "category": category,
+                "target": f.get("target", ""),
+                "source": f.get("source", "static"),
+            },
+        })
+    document = {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{
+            "tool": {"driver": {
+                "name": "mcpscan",
+                "informationUri": "https://github.com/nadirzhon/mcpscan",
+                "version": "0.2.0",
+                "rules": list(rules.values()),
+            }},
+            "automationDetails": {"id": f"mcpscan/{server}"},
+            "results": results,
+        }],
+    }
+    return json.dumps(document, indent=2, ensure_ascii=False)
 
 def to_terminal(server: str, findings: list[dict], surface_counts: dict) -> str:
     lines = [

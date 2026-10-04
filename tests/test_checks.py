@@ -61,3 +61,22 @@ def test_surface_covers_resources_and_prompts():
     }
     cats = [f["category"] for f in check_surface(surface)]
     assert "tool-poisoning" in cats
+
+def test_sarif_output_is_valid():
+    import json
+    from mcpscan.report import to_sarif
+    doc = json.loads(to_sarif("example", [{
+        "severity": "high", "category": "tool-poisoning", "target": "search",
+        "title": "Instruction-like text", "description": "Model-directed instructions.",
+        "recommendation": "Remove imperative instructions.", "source": "static",
+    }]))
+    assert doc["version"] == "2.1.0"
+    assert doc["runs"][0]["tool"]["driver"]["name"] == "mcpscan"
+    assert doc["runs"][0]["results"][0]["ruleId"] == "MCPSCAN/tool-poisoning"
+    assert doc["runs"][0]["results"][0]["level"] == "error"
+
+
+def test_sarif_empty_scan_has_no_results():
+    import json
+    from mcpscan.report import to_sarif
+    assert json.loads(to_sarif("example", []))["runs"][0]["results"] == []

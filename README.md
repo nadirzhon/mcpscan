@@ -129,6 +129,40 @@ It also scans remote HTTP servers directly, e.g. `mcpscan https://mcp.deepwiki.c
 See [`examples/`](examples/) for saved output. Findings are conservative and
 deterministic; add `--ai` for reasoning-based analysis of tool combinations.
 
+
+## GitHub Code Scanning
+
+Use the official composite action to scan an MCP server in CI and publish findings as
+SARIF to GitHub Code Scanning:
+
+```yaml
+name: MCP security
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  mcpscan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nadirzhon/mcpscan@v0.2.0
+        with:
+          server: https://example.com/mcp
+          fail-on: high
+```
+
+You can also generate SARIF directly:
+
+```bash
+mcpscan https://example.com/mcp --sarif > mcpscan.sarif
+```
+
+SARIF uses stable `MCPSCAN/<category>` rule IDs, so findings can be tracked by
+GitHub Code Scanning and other SARIF-compatible security platforms.
+
 ## Safety
 
 `mcpscan` is **read-only** — it lists tool/resource/prompt *definitions* and never calls a tool.
