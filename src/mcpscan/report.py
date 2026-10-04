@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-import json\n\n_SARIF_LEVEL = {"critical": "error", "high": "error", "medium": "warning", "low": "note", "info": "note"}
+import json
+
+_SARIF_LEVEL = {"critical": "error", "high": "error", "medium": "warning", "low": "note", "info": "note"}
 
 SEVERITY_ORDER = ["info", "low", "medium", "high", "critical"]
 _RANK = {s: i for i, s in enumerate(SEVERITY_ORDER)}
